@@ -9,7 +9,15 @@ dotenv.load_dotenv()
 # Constants
 HOW_MANY_RESULTS = 2
 COUNTRY = "us"
-LLM_MODEL = "groq/mixtral-8x7b-32768"
+
+# To use Ollama models
+# LLM_MODEL = "ollama/<model_name>"
+# or
+# To use a provider (LiteLLM compatible)
+# # To use Ollama models
+# LLM_MODEL = "<provider_name>/<model_name>"
+
+LLM_MODEL = "ollama/qwen2.5:1.5b"
 
 # Initialize the LLM
 llm = LLM(model=LLM_MODEL)
