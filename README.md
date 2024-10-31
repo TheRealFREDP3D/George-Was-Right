@@ -1,31 +1,37 @@
 Here is a README.md file for your project:
 
-**Orwell's 1984 Research Project**
-=================================
+# **Orwell's 1984 Research Project**
 
-**Overview**
-------------
+## **Overview**
 
 This project uses CrewAI to analyze current events in relation to themes from George Orwell's "1984". It orchestrate three agents (Researcher, Writer, Illustrator) to perform tasks such as searching for relevant news, comparing news with "1984" themes, writing articles, and generating illustration prompts.
 
-**Prerequisites**
----------------
+---
+
+## **Prerequisites**
 
 * Python 3.8 or later
 * crewai and crewai-tools libraries
 * SerperDevTool API key (add to .env file)
 * LLM model API key (add to .env file or set as environment variable)
 
-**Usage**
-------
+---
+
+## **Usage**
 
 1. Install required libraries: `pip install dotenv rich crewai crewai-tools`
 2. Create a `.env` file with the necessary API keys:
+
+```shell
+# example: /.env
+SERPER_API_KEY=<YOUR_API_KEY>
+<PROVIDER_API_KEY>=<YOUR_API_KEY>
 ```
-SERPER_DEV_TOOL_API_KEY=YOUR_API_KEY
-LLM_MODEL_API_KEY=YOUR_API_KEY
-```
+
 3. Run the script: `python main.py`
+
+---
+
 
 **Output**
 ------
