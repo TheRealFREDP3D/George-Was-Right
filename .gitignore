@@ -2,3 +2,5 @@
 /appmap.log
 /DEV-NOTES
 /.vscode
+/Pipfile
+/Pipfile.lock
