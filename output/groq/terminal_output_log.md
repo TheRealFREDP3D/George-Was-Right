@@ -2,8 +2,7 @@
 
 2024-10-22 10:56:35: task_name="None", task="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today", agent="Researcher", status="completed", output="Here are three recent news events that relate to themes in '1984', the reference URL, and a snippet:
 
-
-George Orwell’s ‘1984’ predicted rise of fascist & totalitarian governments, said Microsoft President in an interview, suggesting how AI should be used to protect democracy in 2024 and not menace to the society 
+George Orwell's '1984' predicted rise of fascist & totalitarian governments, said Microsoft President in an interview, suggesting how AI should be used to protect democracy in 2024 and not menace to the society
 
 Reference URL: https://www.bbc.com/news/technology-57122120
 Snippet: Microsoft president: Orwell's 1984 could happen in 2024 - BBC News
@@ -13,8 +12,8 @@ Donald Trump and the Dystopian 1984 in 2024 - Trump Is What George Orwell Warned
 Reference URL: https://flagpole.com/news/street-scribe/2024/04/03/1984-in-2024-trump-is-what-george-orwell-warned-us-about/
 Snippet: Trump Is What George Orwell Warned Us About - flagpole.com
 
-Orwell’s novel "1984" - why is this classic dystopian novel still used as a yardstick today
-Reference URL: https://www.cnn.com/2023/10/24/opinions/george-orwell-1984-sandra-newman-julia-beers/index.html 
+Orwell's novel "1984" - why is this classic dystopian novel still used as a yardstick today
+Reference URL: https://www.cnn.com/2023/10/24/opinions/george-orwell-1984-sandra-newman-julia-beers/index.html
 Snippet: Opinion: A completely new take on '1984' - CNN"
 
 2024-10-22 10:56:35: task_name="None", task="Compare the news events with themes from '1984' and select the most relevant match and write a small article (300-500 words) on the subject.", agent="Writer", status="started"
@@ -35,30 +34,31 @@ In conclusion, the themes and events depicted in George Orwell's '1984' are stil
 
 2024-10-22 10:59:02: task_name="None", task="Create two sets of prompts: one for an illustration of the current news event and another for an illustration of the similar event or theme from '1984'", agent="Writer", status="completed", output="Set 1: News Event Prompts
 
-* Illustrate a scene showing the spread of disinformation on social media during the 2024 U.S. election.
-* Depict a news headline reading "Disinformation: The Unprecedented Threat to Democracy" and show people from different demographics reading the news on their devices.
-* Show the manipulation of voters through disinformation and propaganda, highlighting the role of social media in its spread.
-* Illustrate a person fact-checking the information they receive on social media to differentiate between the truth and propaganda.
+- Illustrate a scene showing the spread of disinformation on social media during the 2024 U.S. election.
+- Depict a news headline reading "Disinformation: The Unprecedented Threat to Democracy" and show people from different demographics reading the news on their devices.
+- Show the manipulation of voters through disinformation and propaganda, highlighting the role of social media in its spread.
+- Illustrate a person fact-checking the information they receive on social media to differentiate between the truth and propaganda.
 
 Set 2: '1984' Theme Prompts
 
-* Draw a scene from '1984' that depicts the Party's control over all forms of media and communication.
-* Illustrate the use of "newspeak" in the novel, highlighting how the Party manipulates language to control public opinion and suppress dissent.
-* Show the Ministry of Truth in the novel, where false information is disseminated to the public, and true information is altered or destroyed.
-* Depict a scene where Winston Smith, the protagonist of '1984', rebels against the Party's propaganda by writing in his secret diary."
+- Draw a scene from '1984' that depicts the Party's control over all forms of media and communication.
+- Illustrate the use of "newspeak" in the novel, highlighting how the Party manipulates language to control public opinion and suppress dissent.
+- Show the Ministry of Truth in the novel, where false information is disseminated to the public, and true information is altered or destroyed.
+- Depict a scene where Winston Smith, the protagonist of '1984', rebels against the Party's propaganda by writing in his secret diary."
 
 2024-10-22 11:03:33: task_name="None", task="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today", agent="Researcher", status="started"
 
-2024-10-22 11:04:24: task_name="None", task="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today", agent="Researcher", status="completed", output="A list of three recent news events that relate to themes in '1984' 
-1. 'Recent news on government surveillance' 
- Reference URL - https://www.nytimes.com/topic/subject/surveillance-of-citizens-by-government
- Snippet - News about Surveillance of Citizens by Government, including commentary and archival articles published in The New York Times.
-2.  'Recent news on censorship'  
- Reference URL - https://www.politico.com/news/censorship
- Snippet - Beijing tightens grip on China social media giants
+2024-10-22 11:04:24: task_name="None", task="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today", agent="Researcher", status="completed", output="A list of three recent news events that relate to themes in '1984'
+
+1. 'Recent news on government surveillance'
+   Reference URL - https://www.nytimes.com/topic/subject/surveillance-of-citizens-by-government
+   Snippet - News about Surveillance of Citizens by Government, including commentary and archival articles published in The New York Times.
+2. 'Recent news on censorship'  
+   Reference URL - https://www.politico.com/news/censorship
+   Snippet - Beijing tightens grip on China social media giants
 3. 'Recent news on Government propaganda'  
- Reference URL - https://www.cbsnews.com/tag/propaganda/
- Snippet -How China, Russia wage propaganda war with U.S."
+   Reference URL - https://www.cbsnews.com/tag/propaganda/
+   Snippet -How China, Russia wage propaganda war with U.S."
 
 2024-10-22 11:04:24: task_name="None", task="Compare the news events with themes from '1984' and select the most relevant match and write a small article (300-500 words) on the subject.", agent="Writer", status="started"
 
@@ -126,8 +126,8 @@ In "1984," Orwell posits a society where the government employs psychological ma
 
 2024-10-22 11:18:50: task_name="None", task="Create two sets of prompts: one for an illustration of the current news event and another for an illustration of the similar event or theme from '1984'", agent="Writer", status="completed", output="Set 1: Illustration prompts for the news event "TikTok and Youth Mental Health: Weighing the Pros and Cons"
 
-1. Create a visual representation of a young TikTok user's "For You" page, filled with content related to weight loss trends and self-harm. 
-2. Illustrate the potential negative effects of consuming this content, such as anxiety, depression, or disordered eating. 
+1. Create a visual representation of a young TikTok user's "For You" page, filled with content related to weight loss trends and self-harm.
+2. Illustrate the potential negative effects of consuming this content, such as anxiety, depression, or disordered eating.
 3. Design a social media post that promotes responsible digital citizenship, encouraging users to be mindful of the content they consume and engage with on TikTok.
 
 Set 2: Illustration prompts for the '1984' theme
@@ -135,4 +135,3 @@ Set 2: Illustration prompts for the '1984' theme
 1. Create a visual metaphor for the concept of "doublethink" in the context of TikTok, showing users simultaneously consuming and internalizing contradictory messages about mental health.
 2. Illustrate a propaganda poster akin to those found in Orwell's "1984," promoting a manipulated perspective on mental health or well-being.
 3. Design a dystopian society where the government controls its citizens' understanding of mental health through social media platforms, drawing parallels to TikTok and the world of "1984.""
-
