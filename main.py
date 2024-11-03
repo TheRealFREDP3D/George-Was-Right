@@ -1,120 +1,152 @@
+"""
+A CrewAI-based system for analyzing parallels between Orwell's '1984' and modern events.
+This module coordinates multiple AI agents to research, analyze, and create content.
+"""
+
+import os
+from datetime import datetime
+from typing import List
+
 import dotenv
 from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
 
-# Load environment variables from .env file
+class Config:
+    """Central configuration for the application."""
+    TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    SEARCH_RESULTS = 2
+    COUNTRY = "us"
+    LLM_MODEL = "groq/llama3-70b-8192"  # format: provider/model_name
+
+# Load environment variables
 dotenv.load_dotenv()
 
-# Constants
-HOW_MANY_RESULTS = 2
-COUNTRY = "us"
-
-# To use Ollama models
-# LLM_MODEL = "ollama/<model_name>"
-# or
-# To use a provider (LiteLLM compatible)
-# # To use Ollama models
-# LLM_MODEL = "<provider_name>/<model_name>"
-
-LLM_MODEL = "groq/llama3-70b-8192"
-
-# Initialize the LLM
-llm = LLM(model=LLM_MODEL)
-
-# Initialize the tool for internet searching capabilities
-search_tool = SerperDevTool(n_results=HOW_MANY_RESULTS, country=COUNTRY)
-
-# Define the agents
-class ResearcherAgent(Agent):
-    def __init__(self, **kwargs):
-        super().__init__(
-            role="Researcher",
-            goal="Research real world news to find and compare with Orwell's '1984' themes.",
-            backstory="You are an expert researcher with a keen eye for current events and literary analysis.",
-            allow_delegation=False,
-            verbose=True,
-            llm=llm,
-            **kwargs
+class AgentFactory:
+    """Factory class for creating specialized agents."""
+    
+    def __init__(self, llm: LLM):
+        self.llm = llm
+        self.search_tool = SerperDevTool(
+            n_results=Config.SEARCH_RESULTS,
+            country=Config.COUNTRY
         )
 
-class WriterAgent(Agent):
-    def __init__(self, **kwargs):
-        super().__init__(
-            role="Writer",
-            goal="Gather examples of real world news events that could be from Orwell's '1984' book",
-            backstory="You are a skilled writer with a deep understanding of literature and current affairs.",
+    def create_researcher_agent(self) -> Agent:
+        """Creates a modern surveillance and social control analyst agent."""
+        return Agent(
+            role="Gathering Information on Internet",
+            goal="Provide other agents with the information they ask to complete their tasks",
+            backstory="""Investigative researcher specializing in digital surveillance,
+            privacy rights, and information control in modern society.""",
             allow_delegation=False,
             verbose=True,
-            llm=llm,
-            **kwargs
+            llm=self.llm,
+            cache=True,
+            tools=[self.search_tool]
         )
 
-class IllustratorAgent(Agent):
-    def __init__(self, **kwargs):
-        super().__init__(
-            role="Illustrator",
-            goal="Create visual concepts based on provided prompts",
-            backstory="You are a talented illustrator with a knack for translating ideas into compelling visuals.",
+    def create_writer_agent(self) -> Agent:
+        """Creates a comparative analysis journalist agent."""
+        return Agent(
+            role="Comparative Analysis Journalist",
+            goal="Craft compelling narratives connecting '1984' to current reality",
+            backstory="""Award-winning journalist skilled in connecting literary analysis
+            with current events.""",
             allow_delegation=True,
             verbose=True,
-            llm=llm,
-            **kwargs
+            tools=[], 
+            cache=True,
+            llm=self.llm
         )
 
-def create_crew():
-    # Create agents using the specified LLM and search tool
-    researcher = ResearcherAgent(tools=[search_tool])
-    writer = WriterAgent()
-    illustrator = IllustratorAgent()
+    def create_illustrator_agent(self) -> Agent:
+        """Creates a conceptual visual storyteller agent."""
+        return Agent(
+            role="Conceptual Visual Storyteller",
+            goal="Create visual prompts connecting modern surveillance to '1984'",
+            backstory="""
+                Renowned conceptual artist specializing in visual metaphors
+                of surveillance and social control.
+                """,
+            allow_delegation=False,
+            verbose=True,
+            tools=[],
+            cache=True,
+            llm=self.llm
+        )
 
-    # Create tasks
-    tasks = [
-        Task(
-            description="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today",
-            agent=researcher,
-            expected_output="A list of three recent news events that relate to themes in '1984', the reference url and a snippet"
-        ),
-        Task(
-            description="Compare the news events with themes from '1984' and select the most relevant match and write a small article (300-500 words) on the subject.",
-            agent=writer,
-            expected_output="A short article comparing a recent news event to a theme from '1984'",
-        ),
-        Task(
-            description="Create two sets of prompts: one for an illustration of the current news event and another for an illustration of the similar event or theme from '1984'",
-            agent=writer,
-            expected_output="Two sets of illustration prompts: one for the news event and one for the '1984' theme",
-        ),
-    ]
+class TaskManager:
+    """Manages the creation and organization of tasks."""
+    
+    @staticmethod
+    def create_tasks(agents: dict) -> List[Task]:
+        """Creates a list of tasks for the crew to execute."""
+        return [
+            Task(
+                description="Find recent news showing '1984' relevance today",
+                agent=agents['researcher'],
+                expected_output="Three recent relevant news events with URLs"
+            ),
+            Task(
+                description="Write comparative analysis article",
+                agent=agents['writer'],
+                expected_output="Article comparing news event to '1984' theme"
+            ),
+            Task(
+                description="Create illustration prompts for both contexts",
+                agent=agents['illustrator'],
+                expected_output="Two sets of illustration prompts"
+            )
+        ]
 
-    return Crew(
-        agents=[researcher, writer, illustrator],
+def save_output(output: str, model: str):
+    """Save crew output to file."""
+    # Split model string into provider and model_name
+    provider, model_name = model.split('/')
+    
+    # Create output directory if it doesn't exist
+    output_dir = f"output/{provider}"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Create filename with timestamp
+    filename = f"{output_dir}/{model_name}-{Config.TIMESTAMP}.md"
+    
+    # Save output to file
+    with open(filename, "w") as f:
+        f.write(output)
+    
+    return filename
+
+def main():
+    """Main execution flow."""
+    # Initialize core components
+    llm = LLM(model=Config.LLM_MODEL)
+    agent_factory = AgentFactory(llm)
+
+    # Create agents
+    agents = {
+        'researcher': agent_factory.create_researcher_agent(),
+        'writer': agent_factory.create_writer_agent(),
+        'illustrator': agent_factory.create_illustrator_agent()
+    }
+
+    # Create and execute crew
+    tasks = TaskManager.create_tasks(agents)
+    crew = Crew(
+        agents=list(agents.values()),
         tasks=tasks,
         verbose=True,
-        llm=llm,
-        output_log_file="output_log.md"
+        llm=llm
     )
-    
-def main():
-    """
-    Executes the main workflow: create a crew, execute tasks, and save the output as markdown.
-    """
-    crew = create_crew()
-    result = crew.kickoff()
 
-    print(
-    f"""
-    JOB DONE                           
-    Crew execution completed. 
+    # Execute crew and save results
+    result = crew.kickoff()
+    output_file = save_output(str(result), Config.LLM_MODEL)
     
-    LLM model used: {LLM_MODEL}
-    ***************************************************************************
-    """)
-    print(result)
-    
-    # Save the result in markdown format
-    with open(f"output/{LLM_MODEL}.md", "w") as f:
-        f.write(str(result))
+    print(f"\nAnalysis completed successfully using {Config.LLM_MODEL}")
+    print(f"result")
+    print(str(output_file))
 
 if __name__ == "__main__":
     main()
