@@ -17,7 +17,7 @@ class Config:
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "groq/llama3-70b-8192"  # format: provider/model_name
+    LLM_MODEL = "groq/llama3-70b-8192"
 
 # Load environment variables
 dotenv.load_dotenv()
