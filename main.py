@@ -6,7 +6,6 @@ import dotenv
 from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
-from crewai_tools import BaseTool
 
 import agentops
 
@@ -15,8 +14,7 @@ class Config:
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "ollama/Phi-3-mini-4k-instruct-q4"
-
+    LLM_MODEL = "groq/llama-3.2-90b-text-preview"
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -24,12 +22,11 @@ dotenv.load_dotenv()
 # Initialize agentops
 agentops.init()
 
-#Initialize the search tool
+# Initialize the search tool
 search_tool = SerperDevTool(
-            n_results=Config.SEARCH_RESULTS,
-            country=Config.COUNTRY
-        )
-
+    n_results=Config.SEARCH_RESULTS,
+    country=Config.COUNTRY
+)
 
 class AgentFactory:
     """Factory class for creating specialized agents."""
@@ -70,10 +67,8 @@ class AgentFactory:
         return Agent(
             role="Conceptual Visual Storyteller",
             goal="Create visual prompts connecting modern surveillance to '1984'",
-            backstory="""
-                Renowned conceptual artist specializing in visual metaphors
-                of surveillance and social control.
-                """,
+            backstory="""Renowned conceptual artist specializing in visual metaphors
+            of surveillance and social control.""",
             allow_delegation=False,
             verbose=True,
             tools=[],
@@ -91,10 +86,10 @@ class TaskManager:
             Task(
                 description="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today.",
                 agent=agents['researcher'],
-                expected_output="A list of recent relevant world news with with source references URLs"
+                expected_output="A list of recent relevant world news with source references URLs"
             ),
             Task(
-                description="Write comparative analysis article. 700-1000 words. ",
+                description="Write comparative analysis article. 700-1000 words.",
                 agent=agents['writer'],
                 expected_output="Article comparing news event to '1984' theme"
             ),
@@ -104,6 +99,7 @@ class TaskManager:
                 expected_output="Two sets of illustration prompts"
             )
         ]
+
 def main():
     """Main execution flow."""
     # Initialize core components
@@ -125,21 +121,22 @@ def main():
         verbose=True,
         llm=Config.LLM_MODEL,
         planning=True, 
-        planning_llm=LLM(model='groq/mixtral-8x7b-32768')
+        planning_lll=Config.LLM_MODEL
     )
 
-    # Execute crew and save results
-    result = crew.kickoff()
-        
-    print(f"""Analysis completed successfully using {Config.LLM_MODEL}
-          
+    try:
+        # Execute crew and save results
+        result = crew.kickoff()
+        print(f"""Analysis completed successfully using {Config.LLM_MODEL}
+
         ***************************************************************************
-        
+
         {result}
-        
+
         ***************************************************************************
         """)
-   
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
