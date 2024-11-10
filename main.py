@@ -1,8 +1,3 @@
-"""
-A CrewAI-based system for analyzing parallels between Orwell's '1984' and modern events.
-This module coordinates multiple AI agents to research, analyze, and create content.
-"""
-
 import os
 from datetime import datetime
 from typing import List
@@ -11,31 +6,41 @@ import dotenv
 from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
+from crewai_tools import BaseTool
+
+import agentops
 
 class Config:
     """Central configuration for the application."""
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "groq/llama3-70b-8192"
+    LLM_MODEL = "ollama/Phi-3-mini-4k-instruct-q4"
+
 
 # Load environment variables
 dotenv.load_dotenv()
+
+# Initialize agentops
+agentops.init()
+
+#Initialize the search tool
+search_tool = SerperDevTool(
+            n_results=Config.SEARCH_RESULTS,
+            country=Config.COUNTRY
+        )
+
 
 class AgentFactory:
     """Factory class for creating specialized agents."""
     
     def __init__(self, llm: LLM):
         self.llm = llm
-        self.search_tool = SerperDevTool(
-            n_results=Config.SEARCH_RESULTS,
-            country=Config.COUNTRY
-        )
-
+        
     def create_researcher_agent(self) -> Agent:
         """Creates a modern surveillance and social control analyst agent."""
         return Agent(
-            role="Gathering Information on Internet",
+            role="Senior Researcher",
             goal="Provide other agents with the information they ask to complete their tasks",
             backstory="""Investigative researcher specializing in digital surveillance,
             privacy rights, and information control in modern society.""",
@@ -43,7 +48,7 @@ class AgentFactory:
             verbose=True,
             llm=self.llm,
             cache=True,
-            tools=[self.search_tool]
+            tools=[search_tool]
         )
 
     def create_writer_agent(self) -> Agent:
@@ -84,12 +89,12 @@ class TaskManager:
         """Creates a list of tasks for the crew to execute."""
         return [
             Task(
-                description="Find recent news showing '1984' relevance today",
+                description="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today.",
                 agent=agents['researcher'],
-                expected_output="Three recent relevant news events with URLs"
+                expected_output="A list of recent relevant world news with with source references URLs"
             ),
             Task(
-                description="Write comparative analysis article",
+                description="Write comparative analysis article. 700-1000 words. ",
                 agent=agents['writer'],
                 expected_output="Article comparing news event to '1984' theme"
             ),
@@ -99,25 +104,6 @@ class TaskManager:
                 expected_output="Two sets of illustration prompts"
             )
         ]
-
-def save_output(output: str, model: str):
-    """Save crew output to file."""
-    # Split model string into provider and model_name
-    provider, model_name = model.split('/')
-    
-    # Create output directory if it doesn't exist
-    output_dir = f"output/{provider}"
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Create filename with timestamp
-    filename = f"{output_dir}/{model_name}-{Config.TIMESTAMP}.md"
-    
-    # Save output to file
-    with open(filename, "w") as f:
-        f.write(output)
-    
-    return filename
-
 def main():
     """Main execution flow."""
     # Initialize core components
@@ -137,16 +123,23 @@ def main():
         agents=list(agents.values()),
         tasks=tasks,
         verbose=True,
-        llm=llm
+        llm=Config.LLM_MODEL,
+        planning=True, 
+        planning_llm=LLM(model='groq/mixtral-8x7b-32768')
     )
 
     # Execute crew and save results
     result = crew.kickoff()
-    output_file = save_output(str(result), Config.LLM_MODEL)
-    
-    print(f"\nAnalysis completed successfully using {Config.LLM_MODEL}")
-    print(f"result")
-    print(str(output_file))
+        
+    print(f"""Analysis completed successfully using {Config.LLM_MODEL}
+          
+        ***************************************************************************
+        
+        {result}
+        
+        ***************************************************************************
+        """)
+   
 
 if __name__ == "__main__":
     main()
