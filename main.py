@@ -6,6 +6,7 @@ from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
 
+
 import agentops
 
 class Config:
