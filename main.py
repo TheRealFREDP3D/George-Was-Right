@@ -1,9 +1,8 @@
-import os
 from datetime import datetime
 from typing import List
-
 import dotenv
 from rich import print
+
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
 
