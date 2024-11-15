@@ -9,12 +9,15 @@ from crewai_tools import SerperDevTool
 
 import agentops
 
+
 class Config:
     """Central configuration for the application."""
+
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "groq/llama-3.2-90b-text-preview"
+    LLM_MODEL = "groq/llama3-70b-8192"
+
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -23,17 +26,15 @@ dotenv.load_dotenv()
 agentops.init()
 
 # Initialize the search tool
-search_tool = SerperDevTool(
-    n_results=Config.SEARCH_RESULTS,
-    country=Config.COUNTRY
-)
+search_tool = SerperDevTool(n_results=Config.SEARCH_RESULTS, country=Config.COUNTRY)
+
 
 class AgentFactory:
     """Factory class for creating specialized agents."""
-    
+
     def __init__(self, llm: LLM):
         self.llm = llm
-        
+
     def create_researcher_agent(self) -> Agent:
         """Creates a modern surveillance and social control analyst agent."""
         return Agent(
@@ -45,7 +46,7 @@ class AgentFactory:
             verbose=True,
             llm=self.llm,
             cache=True,
-            tools=[search_tool]
+            tools=[search_tool],
         )
 
     def create_writer_agent(self) -> Agent:
@@ -57,9 +58,9 @@ class AgentFactory:
             with current events.""",
             allow_delegation=True,
             verbose=True,
-            tools=[], 
+            tools=[],
             cache=True,
-            llm=self.llm
+            llm=self.llm,
         )
 
     def create_illustrator_agent(self) -> Agent:
@@ -73,32 +74,34 @@ class AgentFactory:
             verbose=True,
             tools=[],
             cache=True,
-            llm=self.llm
+            llm=self.llm,
         )
+
 
 class TaskManager:
     """Manages the creation and organization of tasks."""
-    
+
     @staticmethod
     def create_tasks(agents: dict) -> List[Task]:
         """Creates a list of tasks for the crew to execute."""
         return [
             Task(
-                description="Search for recent real world news that demonstrate how Orwell's book '1984' is still relevant today.",
-                agent=agents['researcher'],
-                expected_output="A list of recent relevant world news with source references URLs"
+                description="Search for recent real world news (2024) that demonstrate how Orwell's book '1984' is still relevant today.",
+                agent=agents["researcher"],
+                expected_output="A list of recent relevant world news with source references URLs",
             ),
             Task(
                 description="Write comparative analysis article. 700-1000 words.",
-                agent=agents['writer'],
-                expected_output="Article comparing news event to '1984' theme"
+                agent=agents["writer"],
+                expected_output="Article comparing news event to '1984' theme",
             ),
             Task(
                 description="Create illustration prompts for both contexts",
-                agent=agents['illustrator'],
-                expected_output="Two sets of illustration prompts"
-            )
+                agent=agents["illustrator"],
+                expected_output="Two sets of illustration prompts",
+            ),
         ]
+
 
 def main():
     """Main execution flow."""
@@ -108,9 +111,9 @@ def main():
 
     # Create agents
     agents = {
-        'researcher': agent_factory.create_researcher_agent(),
-        'writer': agent_factory.create_writer_agent(),
-        'illustrator': agent_factory.create_illustrator_agent()
+        "researcher": agent_factory.create_researcher_agent(),
+        "writer": agent_factory.create_writer_agent(),
+        "illustrator": agent_factory.create_illustrator_agent(),
     }
 
     # Create and execute crew
@@ -120,8 +123,8 @@ def main():
         tasks=tasks,
         verbose=True,
         llm=Config.LLM_MODEL,
-        planning=True, 
-        planning_lll=Config.LLM_MODEL
+        planning=True,
+        planning_llm=Config.LLM_MODEL,
     )
 
     try:
@@ -137,6 +140,7 @@ def main():
         """)
     except Exception as e:
         print(f"An error occurred: {e}")
+
 
 if __name__ == "__main__":
     main()

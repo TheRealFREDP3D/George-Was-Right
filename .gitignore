@@ -1,10 +1,8 @@
 /.env
+/appmap.yml
 /appmap.log
-/DEV-NOTES
 /.vscode
-/Pipfile
-/Pipfile.lock
-/book
 /agentops.log
-book/1984/1984.txt
-/.idx
+/package.json
+/tmp
+/tmp/appmap
