@@ -8,13 +8,14 @@ from crewai_tools import SerperDevTool
 
 import agentops
 
+
 class Config:
     """Central configuration for the application."""
 
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "groq/llama3-70b-8192"
+    LLM_MODEL = "github/gpt-4o"
 
 
 # Load environment variables
@@ -56,7 +57,7 @@ class AgentFactory:
             with current events.""",
             allow_delegation=True,
             verbose=True,
-            tools=[],
+            tools=[search_tool],
             cache=True,
             llm=self.llm,
         )
@@ -157,7 +158,7 @@ def main():
         ***************************************************************************
         """)
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred while executing the crew: {str(e)}")
 
 
 if __name__ == "__main__":
