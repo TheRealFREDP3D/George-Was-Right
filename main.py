@@ -6,9 +6,7 @@ from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
 
-
 import agentops
-
 
 class Config:
     """Central configuration for the application."""
@@ -86,19 +84,39 @@ class TaskManager:
         """Creates a list of tasks for the crew to execute."""
         return [
             Task(
-                description="Search for recent real world news (2024) that demonstrate how Orwell's book '1984' is still relevant today.",
+                description="""Research and analyze current (2024) global surveillance practices, digital privacy concerns, 
+                and social control mechanisms. Focus on:
+                1. Government surveillance programs and data collection
+                2. Social media monitoring and censorship
+                3. Digital privacy breaches and corporate data harvesting
+                4. State-sponsored misinformation campaigns
+                Provide specific examples with verifiable sources and URLs.""",
                 agent=agents["researcher"],
-                expected_output="A list of recent relevant world news with source references URLs",
+                expected_output="Detailed report of 3-5 recent cases with source URLs and key parallels to '1984' themes",
             ),
             Task(
-                description="Write comparative analysis article. 700-1000 words.",
+                description="""Write a compelling 700-1000 word analysis that:
+                1. Introduces the concept of modern surveillance and control
+                2. Presents the researched examples and their implications
+                3. Draws specific parallels to Orwell's '1984' predictions
+                4. Discusses the societal impact and potential future implications
+                5. Concludes with recommendations for maintaining individual privacy and freedom""",
                 agent=agents["writer"],
-                expected_output="Article comparing news event to '1984' theme",
+                expected_output="Well-structured article with clear sections, supporting evidence, and thought-provoking analysis",
             ),
             Task(
-                description="Create illustration prompts for both contexts",
+                description="""Create two sets of detailed illustration prompts:
+                1. For the modern surveillance scenario:
+                   - Depict current digital surveillance methods
+                   - Emphasize the ubiquity of monitoring in everyday life
+                   - Include elements of social media and data collection
+                
+                2. For the '1984' parallel:
+                   - Reference specific elements from Orwell's novel
+                   - Show the similarities with modern surveillance
+                   - Incorporate symbolic elements that bridge past and present""",
                 agent=agents["illustrator"],
-                expected_output="Two sets of illustration prompts",
+                expected_output="Two detailed, contrasting illustration prompts that effectively visualize the comparison",
             ),
         ]
 
