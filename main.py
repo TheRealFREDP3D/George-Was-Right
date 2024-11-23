@@ -501,3 +501,7 @@ def main():
 if __name__ == "__main__":
     main()
 >>>>>>> d86e314 (deleted:    agentops.log (#22))
+<<<<<<< HEAD
+=======
+>>>>>>> 1.6-Update-Tasks
+>>>>>>> be06bdd51ecdb0442e0dda3ebab9b03c47dc492b
