@@ -16,7 +16,7 @@ class Config:
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "github/gpt-4o"
+    LLM_MODEL = "groq/mixtral-8x7b-32768"
 
 
 # Load environment variables
