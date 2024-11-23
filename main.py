@@ -8,7 +8,6 @@ from crewai_tools import SerperDevTool
 
 import agentops
 
-
 class Config:
     """Central configuration for the application."""
 
