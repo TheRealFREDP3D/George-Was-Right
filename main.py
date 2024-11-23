@@ -15,8 +15,9 @@ class Config:
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "github/gpt-4o"
+    LLM_MODEL = "groq/llama3-groq-70b-8192-tool-use-preview"
 
+# groq/llama3-groq-70b-8192-tool-use-preview
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -144,6 +145,8 @@ def main():
         llm=Config.LLM_MODEL,
         planning=True,
         planning_llm=Config.LLM_MODEL,
+	    memory=True,
+        memory_llm=Config.LLM_MODEL
     )
 
     try:
