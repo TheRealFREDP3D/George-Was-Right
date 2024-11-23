@@ -6,7 +6,7 @@ from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
 
-import agentops
+# import agentops
 
 
 class Config:
@@ -15,14 +15,14 @@ class Config:
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     SEARCH_RESULTS = 2
     COUNTRY = "us"
-    LLM_MODEL = "github/gpt-4o"
+    LLM_MODEL = "ollama/Phi-3-mini-4k-instruct-q4:latest"
 
 
 # Load environment variables
 dotenv.load_dotenv()
 
 # Initialize agentops
-agentops.init()
+# agentops.init()
 
 # Initialize the search tool
 search_tool = SerperDevTool(n_results=Config.SEARCH_RESULTS, country=Config.COUNTRY)
