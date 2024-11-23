@@ -6,3 +6,6 @@
 /package.json
 /tmp
 /tmp/appmap
+poetry.lock
+Pipfile
+Pipfile.lock
