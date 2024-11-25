@@ -36,21 +36,24 @@ The file name will be the name of the LLM model used, and the file extension wil
 
 ## **Configuration**
 
-You can configure the script by modifying the following constants:
+You can configure the script by modifying the following environment variables in your `.env` file:
 
 - `HOW_MANY_RESULTS`: The number of search results to retrieve.
 - `COUNTRY`: The country to focus on for the search.
-- `LLM_MODEL`: The large language model to use.
+- `LLM_MODEL`: The large language model to use (e.g., `groq/mixtral-8x7b-32768`).
 
 ## **Known Issues**
 
 - Error handling could be improved.
 - The script relies on a specific LLM model, which may change or become unavailable.
 - The output file path is hardcoded; consider making it more flexible.
+- Merge conflicts should be resolved before committing changes.
 
 ## **Future Development**
 
-- Add more robust error handling and logging.
+- Implement enhanced error handling and logging.
+- Add flexibility to output file path configuration.
+- Explore additional LLM models for broader analysis capabilities.
 - Improve prompt engineering for better results.
 - Allow for more flexible LLM model selection.
 - Enhance output formatting and visualization.
