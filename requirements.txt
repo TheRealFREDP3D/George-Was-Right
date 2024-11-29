@@ -3,3 +3,4 @@ crewai_tools
 python-dotenv
 rich
 agentops
+python-dotenv
