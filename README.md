@@ -34,7 +34,6 @@ SERPER_API_KEY=<YOUR_API_KEY>
 
 The file name will be the name of the LLM model used, and the file extension will be `.md`. The file will contain the results of the analysis.
 
-<<<<<<< HEAD
 ---
 
 ## **Configuration**
@@ -46,22 +45,12 @@ You can configure the script by modifying the following constants:
 - `LLM_MODEL`: The large language model to use.
 
 ---
-=======
-## **Configuration**
-
-You can configure the script by modifying the following environment variables in your `.env` file:
-
-- `HOW_MANY_RESULTS`: The number of search results to retrieve.
-- `COUNTRY`: The country to focus on for the search.
-- `LLM_MODEL`: The large language model to use (e.g., `groq/mixtral-8x7b-32768`).
->>>>>>> origin/main
 
 ## **Known Issues**
 
 - Error handling could be improved.
 - The script relies on a specific LLM model, which may change or become unavailable.
 - The output file path is hardcoded; consider making it more flexible.
-<<<<<<< HEAD
 
 ---
 
@@ -69,22 +58,11 @@ You can configure the script by modifying the following environment variables in
 
 - Add more robust error handling and logging.
 - [x]Improve prompt engineering for better results.
-=======
-- Merge conflicts should be resolved before committing changes.
-
-## **Future Development**
-
-- Implement enhanced error handling and logging.
-- Add flexibility to output file path configuration.
-- Explore additional LLM models for broader analysis capabilities.
-- Improve prompt engineering for better results.
->>>>>>> origin/main
 - Allow for more flexible LLM model selection.
 - Enhance output formatting and visualization.
 
 ---
 
-<<<<<<< HEAD
 ## **Contributing**
 
 1. Fork the repository
@@ -130,6 +108,4 @@ For security concerns or vulnerability reports, please see [SECURITY.md](SECURIT
 
 ---
 
-=======
->>>>>>> origin/main
 [![Sourcery](https://img.shields.io/badge/Sourcery-enabled-brightgreen)](https://sourcery.ai)
