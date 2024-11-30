@@ -280,7 +280,7 @@ As a beginner self-teaching programmer, having the possibility to play with thes
 2. **Technical Stack**
    - Python 3.8+
    - CrewAI Framework
-   - Qwen 2.5 Coder LLM (via Ollama)
+   - Ollama serving local LLMs
    - SerperDev API for web searches
    - Rich library for enhanced terminal output
    - GUI interface using Tkinter
