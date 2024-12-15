@@ -1,0 +1,7 @@
+2024-12-15 12:51:57,291 - root - ERROR - Execution failed: OpenAI API key is required
+Traceback (most recent call last):
+  File "f:\BACKUP\FRED\PROJECTS\_GITHUB-TheRealFredP3D\George-Was-Right\_PUBLIC-REPO-v2.1-GUI\src\main.py", line 36, in main
+    Settings.validate()
+  File "f:\BACKUP\FRED\PROJECTS\_GITHUB-TheRealFredP3D\George-Was-Right\_PUBLIC-REPO-v2.1-GUI\src\config.py", line 63, in validate
+    raise ValueError("OpenAI API key is required")
+ValueError: OpenAI API key is required
