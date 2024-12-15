@@ -205,6 +205,208 @@ class ToolOutputWindow:
 
 import datetime
 import json
+import os
+import traceback
+
+from crewai import Agent, Task, Crew, LLM
+from crewai_tools import SerperDevTool
+from main import Config, AgentFactory, TaskManager, SERPER_API_KEY, COUNTRY, SEARCH_RESULTS
+
+from agent_window import AgentWindow
+from monitor_window import MonitorWindow
+
+class TerminalWindow:
+    """Separate window for terminal output."""
+
+    def __init__(self, root_window):
+        self.window = tk.Toplevel(root_window)
+        self.window.title("Analysis Terminal Output")
+
+        # Nord theme colors
+        self.nord_colors = {
+            "bg": "#2E3440",  # Nord darker background
+            "fg": "#D8DEE9",  # Nord foreground
+            "accent": "#88C0D0",  # Nord blue
+            "button_bg": "#3B4252",  # Nord darker blue
+            "button_fg": "#ECEFF4",  # Nord lighter text
+        }
+
+        # Configure the window
+        window_width = int(root_window.winfo_screenwidth() * 0.4)
+        window_height = int(root_window.winfo_screenheight() * 0.6)
+        x_position = int((root_window.winfo_screenwidth() - window_width) / 2)
+        y_position = int((root_window.winfo_screenheight() - window_height) / 2)
+
+        self.window.geometry(
+            f"{window_width}x{window_height}+{x_position}+{y_position}"
+        )
+        self.window.configure(bg=self.nord_colors["bg"])
+
+        # Create the terminal text widget
+        self.terminal_area = scrolledtext.ScrolledText(
+            self.window,
+            wrap=tk.WORD,
+            bg=self.nord_colors["bg"],
+            fg=self.nord_colors["fg"],
+            font=("Cascadia Code", 10),
+            insertbackground=self.nord_colors["accent"],
+        )
+        self.terminal_area.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        # Configure text tags for ANSI colors using Nord palette
+        self.terminal_area.tag_configure("bold", font=("Cascadia Code", 10, "bold"))
+        self.terminal_area.tag_configure("magenta", foreground="#B48EAD")  # Nord purple
+        self.terminal_area.tag_configure("green", foreground="#A3BE8C")  # Nord green
+        self.terminal_area.tag_configure("red", foreground="#BF616A")  # Nord red
+        self.terminal_area.tag_configure("blue", foreground="#81A1C1")  # Nord blue
+        self.terminal_area.tag_configure("cyan", foreground="#88C0D0")  # Nord cyan
+        self.terminal_area.tag_configure("yellow", foreground="#EBCB8B")  # Nord yellow
+        self.terminal_area.tag_configure("white", foreground="#ECEFF4")  # Nord snow
+
+        # Style the close button with Nord theme
+        style = ttk.Style()
+        style.configure(
+            "Nord.TButton",
+            background=self.nord_colors["button_bg"],
+            foreground=self.nord_colors["button_fg"],
+            bordercolor=self.nord_colors["button_bg"],
+            darkcolor=self.nord_colors["button_bg"],
+            lightcolor=self.nord_colors["button_bg"],
+            relief="flat",
+        )
+
+        style.configure(
+            "NordActive.TButton",
+            background=self.nord_colors["button_bg"],
+            foreground=self.nord_colors["accent"],
+            bordercolor=self.nord_colors["button_bg"],
+            darkcolor=self.nord_colors["button_bg"],
+            lightcolor=self.nord_colors["button_bg"],
+            relief="flat",
+        )
+
+        style.map(
+            "Nord.TButton",
+            background=[
+                ("active", "#4C566A"),  # Nord darker blue for hover
+                ("disabled", "#2E3440"),
+            ],  # Nord darkest for disabled
+            foreground=[("disabled", "#4C566A")],
+        )  # Nord darker blue for disabled text
+
+        style.map(
+            "NordActive.TButton",
+            background=[
+                ("active", "#4C566A"),  # Nord darker blue for hover
+                ("disabled", "#2E3440"),
+            ],  # Nord darkest for disabled
+            foreground=[("disabled", "#4C566A")],
+        )  # Nord darker blue for disabled text
+
+        self.close_button = ttk.Button(
+            self.window,
+            text="Close Terminal",
+            command=self.window.destroy,
+            style="Nord.TButton",
+            padding=5,
+        )
+        self.close_button.pack(pady=5)
+
+        # Bind window close event
+        self.window.protocol("WM_DELETE_WINDOW", self.window.destroy)
+
+        # Focus the window
+        self.window.focus_set()
+
+    def clear(self):
+        """Clear the terminal output."""
+        self.terminal_area.delete(1.0, tk.END)
+
+    def write(self, text, tags=None):
+        """Write text to the terminal with optional tags."""
+        self.terminal_area.insert(tk.END, text, tags)
+        self.terminal_area.see(tk.END)
+        self.terminal_area.update_idletasks()
+
+
+class ToolOutputWindow:
+    """Separate window for displaying tool outputs."""
+
+    def __init__(self, root_window):
+        self.window = tk.Toplevel(root_window)
+        self.window.title("Agent Tool Outputs")
+
+        # Nord theme colors
+        self.nord_colors = {
+            "bg": "#2E3440",  # Nord darker background
+            "fg": "#D8DEE9",  # Nord foreground
+            "accent": "#88C0D0",  # Nord blue
+            "button_bg": "#3B4252",  # Nord darker blue
+            "button_fg": "#ECEFF4",  # Nord lighter text
+        }
+
+        # Configure the window
+        window_width = int(root_window.winfo_screenwidth() * 0.3)
+        window_height = int(root_window.winfo_screenheight() * 0.4)
+        x_position = int((root_window.winfo_screenwidth() - window_width) / 2)
+        y_position = int((root_window.winfo_screenheight() - window_height) / 2)
+
+        self.window.geometry(
+            f"{window_width}x{window_height}+{x_position}+{y_position}"
+        )
+        self.window.configure(bg=self.nord_colors["bg"])
+
+        # Create the output text widget
+        self.output_area = scrolledtext.ScrolledText(
+            self.window,
+            wrap=tk.WORD,
+            bg=self.nord_colors["bg"],
+            fg=self.nord_colors["fg"],
+            font=("Cascadia Code", 10),
+            insertbackground=self.nord_colors["accent"],
+        )
+        self.output_area.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        # Configure text tags
+        self.output_area.tag_configure("tool_name", 
+            font=("Cascadia Code", 10, "bold"),
+            foreground="#88C0D0"  # Nord blue
+        )
+        self.output_area.tag_configure("output", 
+            font=("Cascadia Code", 10),
+            foreground="#D8DEE9"  # Nord foreground
+        )
+        self.output_area.tag_configure("separator",
+            font=("Cascadia Code", 10),
+            foreground="#4C566A"  # Nord muted
+        )
+
+        # Close button
+        self.close_button = ttk.Button(
+            self.window,
+            text="Close Tool Output",
+            command=self.window.destroy,
+            style="Nord.TButton",
+            padding=5,
+        )
+        self.close_button.pack(pady=5)
+
+        # Bind window close event
+        self.window.protocol("WM_DELETE_WINDOW", self.window.destroy)
+
+    def write(self, tool_name, output):
+        """Write tool output with formatting."""
+        self.output_area.insert(tk.END, f"\n[{tool_name}]\n", "tool_name")
+        self.output_area.insert(tk.END, f"{output}\n", "output")
+        self.output_area.insert(tk.END, "-" * 50 + "\n", "separator")
+        self.output_area.see(tk.END)
+        
+    def clear(self):
+        """Clear the output area."""
+        self.output_area.delete(1.0, tk.END)
+
+import datetime
+import json
     """GUI for the CrewAI Analysis System."""
 
 import os
