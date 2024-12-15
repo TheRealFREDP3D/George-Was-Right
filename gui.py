@@ -7,7 +7,6 @@ import os
 import traceback
 
 from crewai import Agent, Task, Crew, LLM
-from crewai_tools import SerperDevTool
 from main import Config, AgentFactory, TaskManager, SERPER_API_KEY, COUNTRY, SEARCH_RESULTS
 
 from agent_window import AgentWindow
@@ -1030,10 +1029,7 @@ class ToolOutputWindow:
         """Clear the output area."""
         self.output_area.delete(1.0, tk.END)
 
-
-class CrewAI_GUI:
-    """GUI for the CrewAI Analysis System."""
-
+=======
     def __init__(self, master):
         """Initialize the GUI and set up the main window."""
 
@@ -1180,12 +1176,10 @@ class CrewAI_GUI:
         file_menu.add_command(label="Save Report", command=self.save_report)
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.master.quit)
-
         # Settings Menu
         settings_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Settings", menu=settings_menu)
         settings_menu.add_command(label="Configure", command=self.show_settings)
-
         # Help Menu
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu)
