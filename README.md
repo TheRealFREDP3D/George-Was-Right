@@ -1,5 +1,7 @@
 # **George-Was-Right | v1.5 | README.md**
 
+[![CodeFactor](https://www.codefactor.io/repository/github/therealfredp3d/george-was-right/badge)](https://www.codefactor.io/repository/github/therealfredp3d/george-was-right)
+
 ## **Overview**
 
 This project uses CrewAI to analyze current events in relation to themes from George Orwell's "1984". It orchestrate three agents (Researcher, Writer, Illustrator) to perform tasks such as searching for relevant news, comparing news with "1984" themes, writing articles, and generating illustration prompts.

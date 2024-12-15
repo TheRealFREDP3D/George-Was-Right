@@ -25,13 +25,16 @@ import openai
 from datetime import datetime
 from typing import List, Dict
 import dotenv
-import os
 from rich import print
 from crewai import Agent, Task, Crew, LLM
 from crewai_tools import SerperDevTool
+import agentops
+from main import LLM_MODEL
 
 # Load environment variables from .env file
 dotenv.load_dotenv()
+
+agentops.init()
 
 # Global configuration constants
 COUNTRY = "us"  # Target country for search results
@@ -44,9 +47,9 @@ if not SERPER_API_KEY:
     )
 
 LLM_MODEL = LLM(
-  model="hf:mistralai/Mistral-7B-Instruct-v0.3",
-  api_key=os.environ.get("GLHF_API_KEY"),
-  base_url="https://glhf.chat/api/openai/v1",
+    model="hf:Qwen/QwQ-32B-Preview",
+    api_key=os.environ.get("GLHF_API_KEY"),
+    base_url="https://glhf.chat/api/openai/v1",
 )  # LLM model identifier
 
 
@@ -91,7 +94,7 @@ class AgentFactory:
 
     def set_search_tool(self, search_tool):
         """Set the search tool for the factory.
-        
+
         Args:
             search_tool: The search tool instance to use
         """
@@ -153,7 +156,7 @@ class AgentFactory:
 
         return self.create_agent(
             role="Digital Surveillance Intelligence Analyst",
-            goal="""Uncover and analyze recent (2024) recent cases of technological surveillance systems, privacy 
+            goal="""Uncover and analyze recent (2024) cases of technological surveillance systems, privacy 
             violations, and social control mechanisms that mirror themes from '1984'. 
             Focus on government surveillance, corporate data collection, disinformation campaigns, and social media monitoring.""",
             backstory="""Expert analyst with deep expertise in digital privacy, mass surveillance 
@@ -264,7 +267,9 @@ def main():
         config = Config()
         llm = LLM(model=config.llm_model)
         search_tool = SerperDevTool(
-            n_results=config.search_results, country=config.country, api_key=SERPER_API_KEY
+            n_results=config.search_results,
+            country=config.country,
+            api_key=SERPER_API_KEY,
         )
         agent_factory = AgentFactory(llm)
         agent_factory.set_search_tool(search_tool)
@@ -284,9 +289,9 @@ def main():
             tasks=tasks,
             verbose=True,
             llm=config.llm_model,
-#  Disabled for quick launch  while testing
-            lanning=True,
-            planning_llm=LLM(model="github/gpt-4o")
+            planning=True,
+            planning_llm=config.llm_model,
+            max_rpm=3,
         )
 
         # Execute crew and save results
