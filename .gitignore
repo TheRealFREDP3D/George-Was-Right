@@ -10,3 +10,8 @@ book/1984/1984.txt
 /.idx
 /__pycache__
 /v2.1-Navie-Review
+./**.pyc
+
+./**.pyo
+/.git
+
