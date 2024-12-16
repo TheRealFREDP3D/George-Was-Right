@@ -99,7 +99,7 @@ Contributions are welcome!  See `.github/CONTRIBUTING.md` for guidelines.
 
 ## License
 
-Apache 2.0.  See `LICENSE` for details.
+MIT License  See `LICENSE` for details.
 
 ---
 
