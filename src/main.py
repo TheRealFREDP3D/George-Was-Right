@@ -1,14 +1,11 @@
 import logging
-from typing import Dict
+from typing import Dict, List
 
-from crewai import Crew, Task
-from crewai.tasks.task import Task
-from crewai.tasks.task_output import TaskOutput
-from crewai.tasks.conditional_task import ConditionalTask
-
-from config import Settings
-from agents import AgentFactory, ResearcherAgent, WriterAgent, IllustratorAgent
-from tasks import TaskManager
+from crewai import Crew, Agent
+from crewai.task import Task  # Updated import statement
+from .config import Settings  # Modified import statement to be relative
+from .agents import AgentFactory
+from .tasks import TaskManager
 from crewai_tools import SerperDevTool
 
 
@@ -29,7 +26,7 @@ class CrewBuilder:
         search_tool = SerperDevTool(
             n_results=Settings.SEARCH_RESULTS,
             country=Settings.COUNTRY,
-            api_key=Settings.SERPER_API_KEY,
+            # api_key=Settings.SERPER_API_KEY,  # Commented out for now
         )
         agent_factory.set_search_tool(search_tool)
 
@@ -54,31 +51,60 @@ class CrewBuilder:
             agents=list(self.agents.values()),
             tasks=self.tasks,
             verbose=True,
-            max_rpm=3,
-            planning=True,
+            max_rpm=Settings.MAX_RPM,
+            planning=Settings.PLANNING,
             planning_llm=Settings.get_llm(),
         )
+
+
+def setup_logging():
+    """
+    Set up logging configuration.
+    """
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+
+def validate_configuration():
+    """
+    Validate the application configuration.
+    """
+    try:
+        Settings.validate()
+    except Exception as e:
+        logging.error(f"Configuration validation failed: {e}")
+        raise
+
+
+def build_crew():
+    """
+    Initialize and build the CrewAI crew.
+    """
+    crew_builder = CrewBuilder()
+    crew_builder.initialize_agents()
+    crew_builder.create_tasks()
+    return crew_builder.build_crew()
 
 
 def main():
     """Main application execution."""
     try:
+        # Set up logging
+        setup_logging()
+
         # Validate configuration
-        Settings.validate()
+        validate_configuration()
 
-        # Initialize and build the crew
-        crew_builder = CrewBuilder()
-        crew_builder.initialize_agents()
-        crew_builder.create_tasks()
-        crew = crew_builder.build_crew()
+        # Build the crew
+        build_crew()
 
-        # Execute and log results
-        result = crew.kickoff()
-        logging.info(f"Analysis completed: {result}")
-        print(result)
+        # Additional logic can be added here if needed
 
     except Exception as e:
-        logging.error(f"Execution failed: {e}", exc_info=True)
+        logging.error(f"An error occurred during main execution: {e}")
 
 
 if __name__ == "__main__":
