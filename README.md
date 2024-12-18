@@ -60,6 +60,39 @@ This project aims to provide a nuanced and insightful examination of how contemp
 
   * GLHF API Key (for Qwen LLM): Obtain from [https://glhf.chat/](https://glhf.chat/) and store in your environment or `.env` file as   `GLHF_API_KEY=<your_key>`.  
 
+CrewAI is using LiteLLM to make the connection to various LLMs and APIs. It's compatible with the following providers: [https://docs.litellm.ai/docs/providers](https://docs.litellm.ai/docs/providers).
+
+```sh
+
+# How to set the LLM provider and model 
+# Example: llm=LLM(model="github/gpt-4o") <provider>/<model_name>
+# 
+# Save the API Key
+# 
+# 1 - /.env File
+   echo 'GROQ_API_KEY=<your_key>' >> .env
+# 
+#           or 
+# 
+# 2 - Environment Variable
+   export GROQ_API_KEY=<your_key>)
+---
+
+```python
+# /src/config.py
+
+# LLM Model Configuration
+# Example
+
+llm=LLM(model="github/gpt-4o")
+llm=LLM(model="gemini/gemini-1.5-pro")
+llm=LLM(model="github/gpt-4o")
+llm=LLM(model="ollama/llama3.2-70b-vision-instruct")
+llm=LLM(model="hf:Qwen/QwQ-32B-Preview", api_key=os.getenv("GLHF_API_KEY"), base_url="https://glhf.chat/api/openai/v1")
+---
+
+[https://docs.litellm.ai/docs/providers](https://docs.litellm.ai/docs/providers)
+
 ---
 
 ### Running the Application

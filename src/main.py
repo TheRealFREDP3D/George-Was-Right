@@ -1,14 +1,15 @@
 import logging
-from typing import Dict
+from typing import Dict, List
+from dotenv import load_dotenv
 
-from crewai import Crew, Task
-from crewai.tasks.task import Task
-from crewai.tasks.task_output import TaskOutput
-from crewai.tasks.conditional_task import ConditionalTask
+# Load environment variables from .env file
+load_dotenv()
 
-from config import Settings
-from agents import AgentFactory, ResearcherAgent, WriterAgent, IllustratorAgent
-from tasks import TaskManager
+from crewai import Crew, Agent
+from crewai.task import Task  # Updated import statement
+from .config import Settings  # Modified import statement to be relative
+from .agents import AgentFactory
+from .tasks import TaskManager
 from crewai_tools import SerperDevTool
 
 
@@ -21,64 +22,93 @@ class CrewBuilder:
         self.agents: Dict[str, Agent] = {}
         self.tasks: List[Task] = []
 
-    def initialize_agents(self):
+     def create_search_tool(self) -> SerperDevTool:
         """
-        Initialize and configure agents for the crew.
+        Create a search tool instance.
         """
-        agent_factory = AgentFactory(Settings.get_llm())
-        search_tool = SerperDevTool(
+        return SerperDevTool(
             n_results=Settings.SEARCH_RESULTS,
             country=Settings.COUNTRY,
             api_key=Settings.SERPER_API_KEY,
         )
+    
+    def initialize_agents(self) -> None:
+        """
+        Initialize and configure agents for the crew.
+        """
+        search_tool: SerperDevTool = self.create_search_tool()
+        agent_factory: AgentFactory = AgentFactory(Settings.get_llm())
         agent_factory.set_search_tool(search_tool)
-
+    
         self.agents = {
             "researcher": agent_factory.create_researcher_agent(),
             "writer": agent_factory.create_writer_agent(),
             "illustrator": agent_factory.create_illustrator_agent(),
         }
-
-    def create_tasks(self):
+    
+    def create_tasks(self, task_manager: TaskManager) -> None:
         """
-        Create tasks for the crew.
+        Create tasks for the crew using the provided task manager.
         """
-        task_manager = TaskManager(self.agents)
         self.tasks = task_manager.create_tasks()
-
+    
     def build_crew(self) -> Crew:
         """
-        Build and return the CrewAI crew.
+        Build and return the crew instance.
         """
-        return Crew(
-            agents=list(self.agents.values()),
-            tasks=self.tasks,
-            verbose=True,
-            max_rpm=3,
-            planning=True,
-            planning_llm=Settings.get_llm(),
-        )
+        # Complete the implementation and add type hints for the return value
+        crew: Crew = Crew(self.agents, self.tasks)
+        return crew
+
+
+def setup_logging():
+    """
+    Set up logging configuration.
+    """
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+
+def validate_configuration():
+    """
+    Validate the application configuration.
+    """
+    try:
+        Settings.validate()
+    except Exception as e:
+        logging.error(f"Configuration validation failed: {e}")
+        raise
+
+
+def build_crew():
+    """
+    Initialize and build the CrewAI crew.
+    """
+    crew_builder = CrewBuilder()
+    crew_builder.initialize_agents()
+    crew_builder.create_tasks()
+    return crew_builder.build_crew()
 
 
 def main():
     """Main application execution."""
     try:
+        # Set up logging
+        setup_logging()
+
         # Validate configuration
-        Settings.validate()
+        validate_configuration()
 
-        # Initialize and build the crew
-        crew_builder = CrewBuilder()
-        crew_builder.initialize_agents()
-        crew_builder.create_tasks()
-        crew = crew_builder.build_crew()
+        # Build the crew
+        build_crew()
 
-        # Execute and log results
-        result = crew.kickoff()
-        logging.info(f"Analysis completed: {result}")
-        print(result)
+        # Additional logic can be added here if needed
 
     except Exception as e:
-        logging.error(f"Execution failed: {e}", exc_info=True)
+        logging.error(f"An error occurred during main execution: {e}")
 
 
 if __name__ == "__main__":
