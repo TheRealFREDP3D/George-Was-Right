@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from crewai import Crew, Agent
-from crewai.task import Task  # Updated import statement
-from .config import Settings  # Modified import statement to be relative
+from crewai.task import Task
+from .config import Settings
 from .agents import AgentFactory
 from .tasks import TaskManager
 from crewai_tools import SerperDevTool
