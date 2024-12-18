@@ -15,3 +15,22 @@ book/1984/1984.txt
 ./**.pyo
 /.git
 
+src/__pycache__/tasks.cpython-311.pyc
+src/__pycache__/tasks.cpython-311.pyc
+src/__pycache__/main.cpython-311.pyc
+src/__pycache__/config.cpython-311.pyc
+src/__pycache__/agents.cpython-311.pyc
+src/__pycache__/__init__.cpython-311.pyc
+/__pycache__/** */
+.gitignore
+src/__pycache__/__init__.cpython-311.pyc
+src/__pycache__/__init__.cpython-312.pyc
+src/__pycache__/main.cpython-311.pyc
+src/__pycache__/main.cpython-312.pyc
+src/__pycache__/__init__.cpython-311.pyc
+src/__pycache__/__init__.cpython-312.pyc
+src/__pycache__/agents.cpython-311.pyc
+src/__pycache__/config.cpython-311.pyc
+src/__pycache__/main.cpython-311.pyc
+src/__pycache__/main.cpython-312.pyc
+src/__pycache__/tasks.cpython-311.pyc

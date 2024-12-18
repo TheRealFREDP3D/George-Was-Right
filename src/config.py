@@ -1,74 +1,40 @@
-import os
-from datetime import datetime
-from typing import Optional
-
-from dotenv import load_dotenv
-from crewai import LLM
-
-# Load environment variables
-load_dotenv()
+from crewai import LLM  # Assuming LLM is part of the crewai module
 
 
 class Settings:
-    """Centralized configuration management."""
+    """
+    Configuration settings for the application.
+    """
 
-    # Core Application Settings
-    APP_NAME: str = "George Was Right"
-    VERSION: str = "0.1.0"
-
-    # Timestamp for unique file naming and logging
-    TIMESTAMP: str = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-
-    # Search Configuration
-    COUNTRY: str = os.getenv("SEARCH_COUNTRY", "us")
-    SEARCH_RESULTS: int = int(os.getenv("SEARCH_RESULTS", 3))
-
-    # API Keys (with error handling)
-    SERPER_API_KEY: Optional[str] = os.getenv("SERPER_API_KEY")
-    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
-
-    # LLM Configuration
-    @classmethod
-    def get_llm(cls) -> LLM:
+    @staticmethod
+    def get_llm():
         """
-        Dynamic LLM configuration with fallback mechanisms.
-
-        Returns:
-            Configured LLM instance
-
-        Raises:
-            ValueError: If no valid LLM configuration is found
+        Get the language model.
         """
-        model_name = os.getenv("LLM_MODEL", "hf:Qwen/QwQ-32B-Preview")
-        api_key = os.getenv("LLM_API_KEY")
-        base_url = os.getenv("LLM_BASE_URL", "https://glhf.chat/api/openai/v1")
+        # Placeholder for actual implementation
+        return LLM(
+            model="hf:uihui-ai/Llama-3.3-70B-Instruct-abliterated",
+            base_url="https://glhf.chat/api/openai/v1",
+        )  # Assuming LLM requires a 'model' parameter
 
-        if not api_key:
-            raise ValueError("No API key configured for the language model")
-
-        return LLM(model=model_name, api_key=api_key, base_url=base_url)
-
-    @classmethod
-    def validate(cls):
+    @staticmethod
+    def validate():
         """
-        Validate critical configuration parameters.
-
-        Raises:
-            ValueError: If any critical configuration is missing
+        Validate the configuration settings.
         """
-        if not cls.SERPER_API_KEY:
-            raise ValueError("Serper API key is required")
+        # Placeholder for actual validation logic
+        pass
 
-        if not cls.OPENAI_API_KEY:
-            raise ValueError("OpenAI API key is required")
+    # SerperSearchTool settings
 
+    # Search Results to Return
+    SEARCH_RESULTS = 10
 
-# Optional logging configuration
-import logging
+    # Country
+    COUNTRY = "US"
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    filename=f"logs/{Settings.TIMESTAMP}_app.log",
-)
-logger = logging.getLogger(__name__)
+    # Agent Settings
+    MAX_RPM = 10
+
+    # Planning Settings
+    PLANNING = True
