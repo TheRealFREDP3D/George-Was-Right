@@ -15,3 +15,4 @@ book/1984/1984.txt
 ./**.pyo
 /.git
 
+/.mypy_cache

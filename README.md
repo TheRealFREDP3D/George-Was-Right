@@ -25,7 +25,7 @@ This project aims to provide a nuanced and insightful examination of how contemp
 * **Visual Prompt Generation:**  Facilitates the creation of compelling visuals that enhance the analysis and engage a wider audience.
 * **Customizable Search Parameters:** Allows users to specify the country and number of search results to tailor the research focus.
 * (Work in Progress) **GUI Integration:** Offers a user-friendly graphical interface for controlling the analysis process, monitoring progress, and saving reports.
-* **Clear and Structured Output:** Generates a well-organized markdown report that presents the research findings, analysis, and illustration prompts in a cohesive manner.
+* (Work in Progress) **Clear and Structured Output:** Generates a well-organized markdown report that presents the research findings, analysis, and illustration prompts in a cohesive manner.
 
 ---
 
