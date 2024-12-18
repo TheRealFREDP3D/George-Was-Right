@@ -11,12 +11,10 @@ class Settings:
         """
         Get the language model.
         """
-        # Placeholder for actual implementation
         return LLM(
             model="hf:uihui-ai/Llama-3.3-70B-Instruct-abliterated",
             base_url="https://glhf.chat/api/openai/v1",
-        )  # Assuming LLM requires a 'model' parameter
-
+        ) 
     @staticmethod
     def validate():
         """
