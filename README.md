@@ -65,7 +65,7 @@ CrewAI is using LiteLLM to make the connection to various LLMs and APIs. It's co
 ```sh
 
 # How to set the LLM provider and model 
-# Example: llm=LLM(model="github/gpt-4o- <provider>/<model_name>
+# Example: llm=LLM(model="github/gpt-4o") <provider>/<model_name>
 # 
 # Save the API Key
 # 

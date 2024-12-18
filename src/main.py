@@ -1,5 +1,9 @@
 import logging
 from typing import Dict, List
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 from crewai import Crew, Agent
 from crewai.task import Task  # Updated import statement
@@ -18,43 +22,43 @@ class CrewBuilder:
         self.agents: Dict[str, Agent] = {}
         self.tasks: List[Task] = []
 
-    def initialize_agents(self):
+     def create_search_tool(self) -> SerperDevTool:
+        """
+        Create a search tool instance.
+        """
+        return SerperDevTool(
+            n_results=Settings.SEARCH_RESULTS,
+            country=Settings.COUNTRY,
+            api_key=Settings.SERPER_API_KEY,
+        )
+    
+    def initialize_agents(self) -> None:
         """
         Initialize and configure agents for the crew.
         """
-        agent_factory = AgentFactory(Settings.get_llm())
-        search_tool = SerperDevTool(
-            n_results=Settings.SEARCH_RESULTS,
-            country=Settings.COUNTRY,
-            # api_key=Settings.SERPER_API_KEY,  # Commented out for now
-        )
+        search_tool: SerperDevTool = self.create_search_tool()
+        agent_factory: AgentFactory = AgentFactory(Settings.get_llm())
         agent_factory.set_search_tool(search_tool)
-
+    
         self.agents = {
             "researcher": agent_factory.create_researcher_agent(),
             "writer": agent_factory.create_writer_agent(),
             "illustrator": agent_factory.create_illustrator_agent(),
         }
-
-    def create_tasks(self):
+    
+    def create_tasks(self, task_manager: TaskManager) -> None:
         """
-        Create tasks for the crew.
+        Create tasks for the crew using the provided task manager.
         """
-        task_manager = TaskManager(self.agents)
         self.tasks = task_manager.create_tasks()
-
+    
     def build_crew(self) -> Crew:
         """
-        Build and return the CrewAI crew.
+        Build and return the crew instance.
         """
-        return Crew(
-            agents=list(self.agents.values()),
-            tasks=self.tasks,
-            verbose=True,
-            max_rpm=Settings.MAX_RPM,
-            planning=Settings.PLANNING,
-            planning_llm=Settings.get_llm(),
-        )
+        # Complete the implementation and add type hints for the return value
+        crew: Crew = Crew(self.agents, self.tasks)
+        return crew
 
 
 def setup_logging():
