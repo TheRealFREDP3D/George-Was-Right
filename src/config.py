@@ -1,4 +1,4 @@
-from crewai import LLM  # Assuming LLM is part of the crewai module
+from crewai import LLM
 from dotenv import load_dotenv
 import os
 
@@ -15,12 +15,11 @@ class Settings:
         """
         Get the language model.
         """
-        model = os.getenv("LLM_MODEL")
-        base_url = os.getenv("LLM_BASE_URL")
+        # Placeholder for actual implementation
         return LLM(
-            model=model,
-            base_url=base_url,
-        )
+            model="hf:uihui-ai/Llama-3.3-70B-Instruct-abliterated",
+            base_url="https://glhf.chat/api/openai/v1",
+        )  # Assuming LLM requires a 'model' parameter
 
     @staticmethod
     def validate():
