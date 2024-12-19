@@ -16,8 +16,11 @@ book/1984/1984.txt
 /.git
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /.mypy_cache
 =======
+=======
+>>>>>>> d55e06e (modified:   .gitignore)
 src/__pycache__/tasks.cpython-311.pyc
 src/__pycache__/tasks.cpython-311.pyc
 src/__pycache__/main.cpython-311.pyc
@@ -37,6 +40,14 @@ src/__pycache__/config.cpython-311.pyc
 src/__pycache__/main.cpython-311.pyc
 src/__pycache__/main.cpython-312.pyc
 src/__pycache__/tasks.cpython-311.pyc
+<<<<<<< HEAD
 >>>>>>> a18270d07215274a1ca4d5d07b747615d3dd6497
 /src/__pycache__
 /visu
+=======
+>>>>>>> d55e06e (modified:   .gitignore)
+src/__pycache__/config.cpython-311.pyc
+src/__pycache__/main.cpython-311.pyc
+src/__pycache__/config.cpython-311.pyc
+src/__pycache__/config.cpython-311.pyc
+src/__pycache__/main.cpython-311.pyc
