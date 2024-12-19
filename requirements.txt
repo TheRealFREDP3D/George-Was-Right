@@ -2,5 +2,4 @@ python-dotenv
 crewai
 crewai_tools
 rich
-agentops
-openai
+
