@@ -1,4 +1,4 @@
-from crewai import LLM  # Assuming LLM is part of the crewai module
+from crewai import LLM
 from dotenv import load_dotenv
 import os
 
@@ -15,8 +15,8 @@ class Settings:
         """
         Get the language model.
         """
-        model = os.getenv("LLM_MODEL")
-        base_url = os.getenv("LLM_BASE_URL")
+        model = os.getenv("LLM_MODEL", "hf:uihui-ai/Llama-3.3-70B-Instruct-abliterated")
+        base_url = os.getenv("LLM_BASE_URL", "https://glhf.chat/api/openai/v1")
         return LLM(
             model=model,
             base_url=base_url,
@@ -27,7 +27,7 @@ class Settings:
         """
         Validate the configuration settings.
         """
-        required_env_vars = ["LLM_MODEL", "LLM_BASE_URL"]
+        required_env_vars = ["LLM_MODEL", "LLM_BASE_URL", "SERPER_API_KEY"]
         for var in required_env_vars:
             if not os.getenv(var):
                 raise ValueError(f"Missing environment variable: {var}")
@@ -63,14 +63,3 @@ class Settings:
 
     # Get the SerperSearchTool settings
     SERPER_SEARCH_TOOL_SETTINGS = get_serper_search_tool_settings()
-    # Search Results to Return
-    SEARCH_RESULTS = 10
-
-    # Country
-    COUNTRY = "US"
-
-    # Agent Settings
-    MAX_RPM = 10
-
-    # Planning Settings
-    PLANNING = True
